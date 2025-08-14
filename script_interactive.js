@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
             btnLoader.style.display = 'flex';
             getStartedBtn.disabled = true;
             
-            // Simulate login process
+            // Faster login process
             setTimeout(() => {
                 // Prepare desktop for slide animation
                 desktop.style.display = 'flex';
@@ -158,14 +158,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Initialize desktop components after transition starts
                     setTimeout(() => {
                         initializeDesktop();
-                    }, 300);
+                    }, 200);
                     
                     // Hide loading screen completely after animation
                     setTimeout(() => {
                         loadingScreen.style.display = 'none';
-                    }, 1200);
-                }, 50);
-            }, 2000); // 2 second loading simulation
+                    }, 800);
+                }, 30);
+            }, 800); // Reduced from 2000ms to 800ms
         }
         
         function shakeLoginCard() {
@@ -228,7 +228,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (maximizeBtn) {
             maximizeBtn.addEventListener('click', function() {
-                browserWindow.classList.toggle('maximized');
+                const isMaximized = browserWindow.classList.contains('maximized');
+                
+                if (!isMaximized) {
+                    // Maximize animation
+                    browserWindow.style.transition = 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    browserWindow.classList.add('maximized');
+                    maximizeBtn.style.backgroundColor = '#28ca42';
+                    
+                    // Hide widgets during maximize
+                    document.querySelector('.widgets').style.opacity = '0.3';
+                    document.querySelector('.widgets').style.pointerEvents = 'none';
+                } else {
+                    // Restore animation
+                    browserWindow.style.transition = 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    browserWindow.classList.remove('maximized');
+                    maximizeBtn.style.backgroundColor = '#ffbd2e';
+                    
+                    // Show widgets when restored
+                    document.querySelector('.widgets').style.opacity = '1';
+                    document.querySelector('.widgets').style.pointerEvents = 'auto';
+                }
+                
+                // Reset transition after animation
+                setTimeout(() => {
+                    browserWindow.style.transition = '';
+                }, 300);
             });
         }
     }
